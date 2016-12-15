@@ -18,6 +18,10 @@ update_dma <- function() {
     
     #bewerken
     # variabelen Klant en Campaign toevoegen
+    pattern <- paste0(dma$document[1,4], collapse = "|") 
+    if (pmatch(pattern, dma$document[2,2], nomatch = 0) > 0) {
+      dma$document[2,2] <- trimws(gsub(pattern = pattern, "", dma$document[2,2]))
+    }
     dma$channel <- cbind(a=dma$document[1,4], b=dma$document[2,2], dma$channel)
     names(dma$channel)[1] <- "Klant"
     names(dma$channel)[2] <- "Campaign"
