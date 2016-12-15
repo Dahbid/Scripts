@@ -8,6 +8,8 @@ update_dma <- function() {
     #inlezen
     vec_ruw <- choose.files(caption = "Open het ruwe channel url report",
                             default = "S:\\Insights\\5 - Business & Data Solutions\\2. DMA\\Tableau\\Dashboard\\Data\\Channel URL\\Ruw\\ruw")
+    resultaat <- list()
+    resultaat2 <- vector()
     for (i in vec_ruw) {
     dma <- list()
     dma$document <- read_excel(path = i, sheet = 1, skip = 1, col_names = F)           # sheet 1
@@ -49,14 +51,19 @@ update_dma <- function() {
     dma$channel[, 8:13][is.na(dma$channel[, 8:13])] <- "-"
     # wat als ik alle punten met komma's verwissel?
     dma$channel[8:13] <- lapply( dma$channel[8:13], function(col) gsub(".", ",", col, fixed = T))
+    resultaat[[length(resultaat)+1]] <- dma
     
     # output naam en map creëren
     output_naam <- gsub(" \\(Ruw\\)", "", basename(i), ignore.case = T)
+    
+    resultaat2 <- append(resultaat2, output_naam)
+    }
     vec_export <- choose.dir(caption = "Kies de opslagmap",
                              default = "S:\\Insights\\5 - Business & Data Solutions\\2. DMA\\Tableau\\Dashboard\\Data\\Channel URL")
     
     # samenvoegen en exporteren
-    write.xlsx(x = dma$channel, file = paste0(vec_export, sep = "\\", output_naam), row.names = F)
+    for (j in 1:length(vec_ruw)) {
+      write.xlsx(x = resultaat[[j]]$channel, file = paste0(vec_export, sep = "\\", resultaat2[j]), row.names = F)
     }
   })  
 }
