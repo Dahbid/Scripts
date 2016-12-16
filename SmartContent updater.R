@@ -39,3 +39,29 @@ brandnaam <- sub(" -.*", "", gsub(pattern = "Januari|Februari|Maart|April|Mei|Ju
 
 # brandnaam toevoegen aan Brand
 smart1$Brand <- brandnaam
+
+
+# andere bestand
+vec_ruw_doel <- choose.files(default = "S:\\Insights\\5 - Business & Data Solutions\\1. Data Visualisatie\\SmartContent\\Rapportages 2016\\ruw",
+                             caption = "Selecteer de twee exportbestanden.")
+smart2 <- read_excel(path = vec_ruw_doel, sheet = 1)
+smart2 <- select(smart2, -1, -2, -ends_with("indicator"))
+
+# na Campaign drie kolommen toevoegen: Platform, Ad type en Brand
+smart2$Platform <- ""
+smart2$`Ad type` <- ""
+smart2$Brand <- ""
+smart2 <- smart2[, c(1, 45:47, 2:44)]
+
+# platform zelf invullen
+smart1$Platform <- platf
+
+# ad type invullen
+smart2 <- separate(smart2, Campaign, into = c("Campaign1", "Campaign2", "Campaign3"), sep = "-", extra = "merge")
+smart2$`Ad type` <- trimws(smart2$Campaign2)
+smart2 <- unite(smart2, Campaign, 1:3, sep = "-")
+
+# brandnaam toevoegen aan Brand
+brandnaam2 <- sub(" -.*", "", gsub(pattern = "Januari|Februari|Maart|April|Mei|Juni|Juli|Augustus|September|Oktober|November|December", 
+                                  x = basename(vec_ruw_doel), "-", ignore.case = T))
+smart2$Brand <- brandnaam2
