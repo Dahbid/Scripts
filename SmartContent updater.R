@@ -20,6 +20,7 @@ update_smartcontent <- function(platform) {
     #Bewerken
     #(ruw)
     smart1 <- read_excel(path = vec_ruw, sheet = 1)
+    smart1$Starts <- as.Date(smart1$Starts)
   
     # eerste 2 kolommen verwijderen + Results Type (Result indicator)
     smart1 <- select(smart1, -1, -2, -5)
@@ -45,6 +46,7 @@ update_smartcontent <- function(platform) {
   
     #(ruw met doelgroep)
     smart2 <- read_excel(path = vec_ruw_doel, sheet = 1)
+    smart2$Starts <- as.Date(smart2$Starts)
     smart2 <- select(smart2, -1, -2, -ends_with("indicator"))
     smart2$Platform <- ""
     smart2$`Ad type` <- ""
