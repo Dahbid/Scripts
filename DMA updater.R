@@ -1,10 +1,5 @@
 update_dma <- function() {
   system.time({
-    require(readxl)
-    require(dplyr)
-    require(tidyr)
-    require(xlsx)
-    
     #inlezen
     vec_ruw <- choose.files(caption = "Open het ruwe channel url report",
                             default = "S:\\Insights\\5 - Business & Data Solutions\\2. DMA\\Tableau\\Dashboard\\Data\\Channel URL\\Ruw\\ruw")
@@ -12,10 +7,10 @@ update_dma <- function() {
     resultaat2 <- vector()
     for (i in vec_ruw) {
     dma <- list()
-    dma$document <- read_excel(path = i, sheet = 1, skip = 1, col_names = F)           # sheet 1
-    dma$document <- separate(dma$document, X4, c("X4a", "X4"), sep = " - ", fill = "left")   # brand en campagne scheiden
+    dma$document <- readxl::read_excel(path = i, sheet = 1, skip = 1, col_names = F)           # sheet 1
+    dma$document <- tidyr::separate(dma$document, X4, c("X4a", "X4"), sep = " - ", fill = "left")   # brand en campagne scheiden
     dma$document <- dma$document[, apply(dma$document, 2, function(x) !any(is.na(x)))]       # lege kolom die ontstaat wegdoen
-    dma$channel <- read_excel(path = i, sheet = 3, skip = 2, col_types = c(rep("text", 14)))           # sheet 2
+    dma$channel <- readxl::read_excel(path = i, sheet = 3, skip = 2, col_types = c(rep("text", 14)))           # sheet 2
     dma$channel <- dma$channel[,3:ncol(dma$channel)]
     
     #bewerken
@@ -36,8 +31,8 @@ update_dma <- function() {
     
     # start date en end date toevoegen (mutate voegt het aan het eind toe)
     dma$datum <- data.frame(dma$document[3,4])
-    dma$datum <- separate(dma$datum, X6, into = c("Start date", "End date"), sep = " - ")
-    dma$channel <- mutate(dma$channel, `Start date` = dma$datum$`Start date`, `End date` = dma$datum$`End date`)
+    dma$datum <- tidyr::separate(dma$datum, X6, into = c("Start date", "End date"), sep = " - ")
+    dma$channel <- dplyr::mutate(dma$channel, `Start date` = dma$datum$`Start date`, `End date` = dma$datum$`End date`)
     
     # omzetten in datum variabelen en het format aanpassen in dd-mm-jjjj
     dma$channel$`Start date` <- strptime(as.character(dma$channel$`Start date`), format = "%Y-%m-%d")
@@ -63,7 +58,7 @@ update_dma <- function() {
     
     # samenvoegen en exporteren
     for (j in 1:length(vec_ruw)) {
-      write.xlsx(x = resultaat[[j]]$channel, file = paste0(vec_export, sep = "\\", resultaat2[j]), row.names = F)
+      xlsx::write.xlsx(x = resultaat[[j]]$channel, file = paste0(vec_export, sep = "\\", resultaat2[j]), row.names = F)
     }
   })  
 }
