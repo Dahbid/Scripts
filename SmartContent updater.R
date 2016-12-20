@@ -43,7 +43,24 @@ update_smartcontent <- function(platform) {
   
     # Platform toevoegen vanuit functie-argument
     smart1$Platform <- platform
-  
+    
+    # extra dashboard variabelen berekenen en variabelennamen aanpassen aan dashboard document
+    smart1 <- smart1 %>%
+      mutate(`Conversation Rate` = `Post comments`/Reach,
+             `Amplification Rate` = `Post shares`/Reach,
+             `Applause Rate` = `Post Reactions`/Reach,
+             `Key Engagements` = (`Post comments`+`Post shares`+`Post Reactions`)/Reach)
+    var_namen <- c("Campaign Name",	"Platform",	"Ad Type",	"Brand",	"Results",	"Reach",	"Amount Spent (EUR)",	"Clicks (All)",	
+                   "Cost per Unique Click (All) (EUR)",	"CPC (All) (EUR)",	"CPM (Cost per 1,000 Impressions) (EUR)",
+                   "Cost per 1,000 People Reached (EUR)",	"CTR (All)",	"Frequency",	"Impressions",	"Objective",	"Social Impressions",	
+                   "Social Reach", "Page Likes",	"Page Engagement",	"Photo Views",	"Post Shares",	"Post Comments",	"Post Engagement",	
+                   "Post Likes", "Clicks to Play Video",	"Video Views",	"Cost per Page Like (EUR)",	"Cost per Photo View (EUR)",	
+                   "Cost per Post Share (EUR)", "Cost per Post Comment (EUR)",	"Cost per Post Engagement (EUR)",	"Cost per Post Like (EUR)",	
+                   "Cost per Clicks to Play Video (EUR)", "Cost per Video View (EUR)",	"Avg. % of Video Viewed",	"Video Views to 100%", 
+                   "Video Views to 25%",	"Video Views to 50%", "Video Views to 75%",	"Video Views to 95%",	"Starts",	"CPC (Link)",	"CTR (Link)",	
+                   "Link Clicks",	"Conversation Rate", "Amplifcation Rate",	"Applause Rate", "Key Engagements")
+    colnames(smart1) <- var_namen
+    
     #(ruw met doelgroep)
     smart2 <- read_excel(path = vec_ruw_doel, sheet = 1)
     smart2$Starts <- as.Date(smart2$Starts)
@@ -59,6 +76,24 @@ update_smartcontent <- function(platform) {
     brandnaam2 <- sub(" -.*", "", gsub(pattern = "Januari|Februari|Maart|April|Mei|Juni|Juli|Augustus|September|Oktober|November|December", 
                                      x = basename(vec_ruw_doel), "-", ignore.case = T))
     smart2$Brand <- brandnaam2
+    
+    smart2 <- smart2 %>%
+      mutate(`Conversation Rate` = `Post comments`/Reach,
+             `Amplification Rate` = `Post shares`/Reach,
+             `Applause Rate` = `Post Reactions`/Reach,
+             `Key Engagements` = (`Post comments`+`Post shares`+`Post Reactions`)/Reach)
+    var_namen2 <- c("Campaign Name",	"Platform", 	"Ad Type",	"Brand",	"Age",	"Gender",	"Results",	"Reach",	
+                    "Amount Spent (EUR)",	"Clicks (All)",	"Cost per Unique Click (All) (EUR)",	"CPC (All) (EUR)",
+                    "CPM (Cost per 1,000 Impressions) (EUR)",	"Cost per 1,000 People Reached (EUR)",	"CTR (All)",	
+                    "Frequency",	"Impressions",	"Objective",	"Social Impressions",	"Social Reach",	"Page Likes",
+                    "Page Engagement",	"Photo Views",	"Post Shares",	"Post Comments",	"Post Engagement",	"Post Likes",	
+                    "Clicks to Play Video",	"Video Views",	"Cost per Page Like (EUR)",	"Cost per Photo View (EUR)",	
+                    "Cost per Post Share (EUR)",	"Cost per Post Comment (EUR)",	"Cost per Post Engagement (EUR)",	
+                    "Cost per Post Like (EUR)",	"Cost per Clicks to Play Video (EUR)",	"Cost per Video View (EUR)",	
+                    "Avg. % of Video Viewed",	"Video Views to 100%",	"Video Views to 25%",	"Video Views to 50%",	
+                    "Video Views to 75%",	"Video Views to 95%",	"Datum Post",	"CPC (Link)",	"CTR (Link)",	"Link Clicks",
+                    "Conversation Rate",	"Amplifcation Rate",	"Applause Rate",	"Key Engagements")
+    colnames(smart2) <- var_namen2
   
   #Exporteren
   #outputmap pad creëren
