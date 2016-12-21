@@ -27,8 +27,8 @@ update_dma <- function() {
     dma$channel <- dma$channel[!is.na(dma$channel$Format),]
     namen <- c("Klant", "Campaign", "Network", "Placement", "Target", "Domain", "Format", "Impressions", "Measured",
                "Avg ToP", "Avg TiV", "> 5s", "> 1s")
-    dma$channel <- dma$channel %>% select(one_of(namen))
-    
+    dma$channel <- dplyr::select(dma$channel, dplyr::one_of(namen))
+	
     # start date en end date toevoegen (mutate voegt het aan het eind toe)
     dma$datum <- data.frame(dma$document[3,4])
     dma$datum <- tidyr::separate(dma$datum, X6, into = c("Start date", "End date"), sep = " - ")
