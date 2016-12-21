@@ -1,8 +1,5 @@
 update_urendashboard <- function() {
   system.time({
-  require(openxlsx)
-  require(readxl)
-  require(dplyr)
   Sys.setenv(R_ZIPCMD= "C:\\Rtools\\bin\\zip.exe")
   # de meest recente altair data selecteren
   vec_sc <- choose.files(caption = "Open de meest recente SC uren", default = "S:\\Insights\\5 - Business & Data Solutions\\10. Starcom Tableau Server DB\\Uren Dashboard\\Data\\SC")
@@ -59,7 +56,7 @@ update_urendashboard <- function() {
 
   # nieuwe werknemers eraan plakken
   colnames(output) <- colnames(bron_xtra)
-  output <- bind_rows(output, bron_xtra)
+  output <- dplyr::bind_rows(output, bron_xtra)
   output[ , 23:27] <- lapply(output[,23:27], as.Date)
   output$PTalent_ID[output$PTalent_ID==94385] <- 101710
   # overplaatsen in een list voor de export
