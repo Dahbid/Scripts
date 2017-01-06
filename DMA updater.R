@@ -3,6 +3,10 @@ update_dma <- function() {
     #inlezen
     vec_ruw <- choose.files(caption = "Open het ruwe channel url report",
                             default = "S:\\Insights\\5 - Business & Data Solutions\\2. DMA\\Tableau\\Dashboard\\Data\\Channel URL\\Ruw\\ruw")
+
+	var_types <- c("text", "text", "text", "text", "text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric",
+               "numeric", "numeric")
+			   
     resultaat <- list()
     resultaat2 <- vector()
     for (i in vec_ruw) {
@@ -10,7 +14,7 @@ update_dma <- function() {
     dma$document <- readxl::read_excel(path = i, sheet = 1, skip = 1, col_names = F)           # sheet 1
     dma$document <- tidyr::separate(dma$document, X4, c("X4a", "X4"), sep = " - ", fill = "left")   # brand en campagne scheiden
     dma$document <- dma$document[, apply(dma$document, 2, function(x) !any(is.na(x)))]       # lege kolom die ontstaat wegdoen
-    dma$channel <- readxl::read_excel(path = i, sheet = 3, skip = 2, col_types = c(rep("text", 14)))           # sheet 2
+    dma$channel <- readxl::read_excel(path = i, sheet = 3, skip = 2, col_types = var_types)           # sheet 2
     dma$channel <- dma$channel[,3:ncol(dma$channel)]
     
     #bewerken
@@ -36,16 +40,16 @@ update_dma <- function() {
     
     # omzetten in datum variabelen en het format aanpassen in dd-mm-jjjj
     dma$channel$`Start date` <- strptime(as.character(dma$channel$`Start date`), format = "%Y-%m-%d")
-    dma$channel$`Start date` <- format(dma$channel$`Start date`, "%d-%m-%Y")
+    dma$channel$`Start date` <- as.Date(dma$channel$`Start date`)
     dma$channel$`End date` <- strptime(as.character(dma$channel$`End date`), format = "%Y-%m-%d")
-    dma$channel$`End date` <- format(dma$channel$`End date`, "%d-%m-%Y")
+    dma$channel$`End date` <- as.Date(dma$channel$`End date`)
     
     #ehhh... ja
-    dma$channel[8:13] <- lapply( dma$channel[8:13], function(col) as.numeric(gsub("-$|\\,", "", col)))
+    #dma$channel[8:13] <- lapply( dma$channel[8:13], function(col) as.numeric(gsub("-$|\\,", "", col)))
     # eeeennnnnn streepjes terug
-    dma$channel[, 8:13][is.na(dma$channel[, 8:13])] <- "-"
+    #dma$channel[, 8:13][is.na(dma$channel[, 8:13])] <- "-"
     # wat als ik alle punten met komma's verwissel?
-    dma$channel[8:13] <- lapply( dma$channel[8:13], function(col) gsub(".", ",", col, fixed = T))
+    #dma$channel[8:13] <- lapply( dma$channel[8:13], function(col) gsub(".", ",", col, fixed = T))
     resultaat[[length(resultaat)+1]] <- dma
     
     # output naam en map creëren
@@ -58,7 +62,7 @@ update_dma <- function() {
     
     # samenvoegen en exporteren
     for (j in 1:length(vec_ruw)) {
-      xlsx::write.xlsx(x = resultaat[[j]]$channel, file = paste0(vec_export, sep = "\\", resultaat2[j]), row.names = F)
+      xlsx::write.xlsx(x = resultaat[[j]]$channel, file = paste0(vec_export, sep = "\\", resultaat2[j],"x"), row.names = F)
     }
   })  
 }
