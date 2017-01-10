@@ -61,8 +61,9 @@ update_dma <- function() {
                              default = "S:\\Insights\\5 - Business & Data Solutions\\2. DMA\\Tableau\\Dashboard\\Data\\Channel URL")
     
     # samenvoegen en exporteren
+    Sys.setenv(R_ZIPCMD= "S:\\Insights\\5 - Business & Data Solutions\\14. R\\Shiny\\zip.exe")
     for (j in 1:length(vec_ruw)) {
-      xlsx::write.xlsx(x = resultaat[[j]]$channel, file = paste0(vec_export, sep = "\\", resultaat2[j],"x"), row.names = F)
+      openxlsx::write.xlsx(x = resultaat[[j]]$channel, file = paste0(vec_export, sep = "\\", resultaat2[j],"x"), row.names = F)
     }
   })  
 }
