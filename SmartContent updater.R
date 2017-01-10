@@ -109,7 +109,8 @@ update_smartcontent <- function(platform) {
     outputnaam2 <- paste0(outputmap, sep = "\\", gsub("Ruw ", "", basename(vec_ruw_doel), ignore.case = T))
     
     # wegschrijven
-    xlsx::write.xlsx(x = as.data.frame(smart1), file = outputnaam1, row.names = F)
-    xlsx::write.xlsx(x = as.data.frame(smart2), file = outputnaam2, row.names = F)
+    Sys.setenv(R_ZIPCMD= "S:\\Insights\\5 - Business & Data Solutions\\14. R\\Shiny\\zip.exe")
+    openxlsx::write.xlsx(x = as.data.frame(smart1), file = outputnaam1, row.names = F)
+    openxlsx::write.xlsx(x = as.data.frame(smart2), file = outputnaam2, row.names = F)
   })
 }
