@@ -14,7 +14,7 @@ plot_missings <- function(DT) {
   
   # plot raster
   ggplot2::ggplot(data = slag, ggplot2::aes_string(x = "variable", y = "id", text = "value")) +
-    ggplot2::geom_raster(aes_string(fill = "value")) +
+    ggplot2::geom_raster(ggplot2::aes_string(fill = "value")) +
     ggplot2::theme_minimal() +
     ggplot2::labs(x = "", y = "Rij") +
     ggplot2::guides(fill = ggplot2::guide_legend(title = "Type")) +
