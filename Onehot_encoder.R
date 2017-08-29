@@ -6,7 +6,7 @@ cr_onehot <- function(predictors, matrix = TRUE, complete = TRUE) {
   if (length(factor_vars) > 0) {
     for (i in factor_vars) {
       inds <- as.character(unlist(lapply(Filter(is.factor, predictors[ ,..i]), levels))) # hey it works
-      if (complete == FALSE) { # when complete == TRUE create n-1 dummies
+      if (complete == FALSE) { # if complete == FALSE create n-1 dummies
         inds <- inds[1:length(inds) - 1]
       }
       predictors[, (inds) := lapply(lapply(inds, function(x) .SD == x), as.numeric), .SDcols = i]
