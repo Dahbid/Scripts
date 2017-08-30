@@ -7,13 +7,13 @@ plot_missings <- function(DT) {
   
   # convert cells to either the class() or NA
   DT2[, (vars) := lapply(.SD, function(x) ifelse(!is.na(x), paste(class(x), collapse = '\n'), NA))]
-  DT2[, id := .I]
+  DT2[, id_xyz := .I]
   
   # melt data.table (gives warning that not all measure vars are of the same type)
-  slag <- suppressWarnings(melt(DT2, id.vars = "id", measure.vars = vars) )
+  slag <- suppressWarnings(melt(DT2, id.vars = "id_xyz", measure.vars = vars) )
   
   # plot raster
-  ggplot2::ggplot(data = slag, ggplot2::aes_string(x = "variable", y = "id", text = "value")) +
+  ggplot2::ggplot(data = slag, ggplot2::aes_string(x = "variable", y = "id_xyz", text = "value")) +
     ggplot2::geom_raster(ggplot2::aes_string(fill = "value")) +
     ggplot2::theme_minimal() +
     ggplot2::labs(x = "", y = "Rij") +
