@@ -1,4 +1,10 @@
 missings <- function(DT) {
+  suppressPackageStartupMessages(library(data.table))
+  # transform vectors into data.tables
+  if (is.vector(DT)) {
+    DT <- data.table(DT)
+  }
+  
   rown <- nrow(DT)
   if (is.data.table(DT)) {
     # find sum of missings
