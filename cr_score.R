@@ -5,14 +5,19 @@ cr_score <- function(DT, response, models, by) {
     setDT(DT)
   }
   
+  # save number of groups
+  no_group <- length(by) + 1
+  
+  # calculate rmse per model
   output <- list()
   for (i in models) {
     res <- DT[, .(rmse(get(response), get(i))), by = by] 
-    setnames(res, 2, i)
+    setnames(res, no_group, i)
     
     output[[length(output) + 1]] <- res
   }
   
+  # reduce list output to data.table
   output <- Reduce(cbind, output)
   return(output[, !duplicated(names(output)), with = F])
 }
