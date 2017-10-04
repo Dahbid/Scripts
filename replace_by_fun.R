@@ -1,4 +1,4 @@
-replace_by_fun <- function(DT, replace, FUN, response, grouping) {
+replace_by_fun <- function(DT, replace, FUN, response, grouping, round = NULL) {
   suppressPackageStartupMessages(library(data.table))
   FUN <- match.fun(FUN)
   
@@ -15,5 +15,12 @@ replace_by_fun <- function(DT, replace, FUN, response, grouping) {
   DT[, (replace) := NULL]
   setnames(DT, "V1", replace)
   
-  return(DT)
+  # rounding
+  if (is.null(round)) {
+    return(DT)
+  } else {
+    DT[, (replace) := round(get(replace), digits = round)]
+    return(DT)
+  }
+
 }
