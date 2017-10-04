@@ -13,10 +13,11 @@ plot_missings <- function(DT) {
   slag <- suppressWarnings(melt(DT2, id.vars = "id_xyz", measure.vars = vars) )
   
   # plot raster
-  ggplot2::ggplot(data = slag, ggplot2::aes_string(x = "variable", y = "id_xyz", text = "value")) +
-    ggplot2::geom_raster(ggplot2::aes_string(fill = "value")) +
-    ggplot2::theme_minimal() +
-    ggplot2::labs(x = "", y = "Rij") +
-    ggplot2::guides(fill = ggplot2::guide_legend(title = "Type")) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1))
+    ggplot2::ggplot(data = slag, ggplot2::aes(x = variable, y = id_xyz, text = value)) +
+      ggplot2::geom_raster(ggplot2::aes(fill = value)) +
+      ggplot2::theme_minimal() +
+      ggplot2::labs(x = "", y = "Rij") +
+      ggplot2::guides(fill = ggplot2::guide_legend(title = "Type")) +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
+      ggplot2::labs(title = "Missing values by row/column")
 }
