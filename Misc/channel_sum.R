@@ -8,8 +8,8 @@ channel_sum <- function(output, ZA_type) {
   dt[, Date2 := as.numeric(Date2)]
   
   # split data on month
-  dt[, Maand := zoo::as.yearmon(Datum)]
-  dt <- split(dt, by = "Maand")
+  dt[, Weeknummer := paste(isoweek(Datum), lubridate::year(Datum), sep = "-")]
+  dt <- split(dt, by = "Weeknummer")
   
   library(doParallel)
   # build cluster based on size of ZA_type and available cores
@@ -27,13 +27,14 @@ channel_sum <- function(output, ZA_type) {
   result <- list()
   for (j in ZA_type) {
     namen2 <- c("Channel", "Date", "Date2", "id", j)
-    a <- foreach(i = no_groep, .packages = c("sqldf", "data.table"), .verbose = TRUE, .export = "namen2") %dopar% {
+    a <- foreach(i = no_groep, .packages = "data.table", .verbose = TRUE, .export = "namen2") %dopar% {
       DT <- dt[[i]][, ..namen2]
+        res <- DT[, Sum := DT[DT[row,
+                               .(Datum, Zender = setdiff(Channels, Zender), Datum2)],
+                            on = .(Datum, Zender, Datum2), roll = 'nearest',
+                            sum(get(j))]
+                , by = .(row = 1:nrow(DT))]
       
-      s <- sprintf("select id, sum(bZA) %s from (select a.*, b.%s bZA, min(abs(a.Date2 - b.Date2)) from DT a join DT b on a.Date = b.Date and a.Channel != b.Channel group by a.id, b.Channel) group by id",
-                   paste0("Sum_", j), j)
-      res <- sqldf(x = s, verbose = TRUE, dbname = tempfile())
-      sqldf()
       return(res)
     }
     result[[length(result) + 1]] <- rbindlist(a)
