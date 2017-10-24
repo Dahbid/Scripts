@@ -1,5 +1,6 @@
 cr_score <- function(DT, response, models, by) {
   library(Metrics)
+  FUN <- match.fun(FUN)
   # check if DT is a data.table
   if (!is.data.table(DT)) {
     setDT(DT)
@@ -11,7 +12,7 @@ cr_score <- function(DT, response, models, by) {
   # calculate rmse per model
   output <- list()
   for (i in models) {
-    res <- DT[, .(rmse(get(response), get(i))), by = by] 
+    res <- DT[, .(FUN(get(response), get(i))), by = by] 
     setnames(res, no_group, i)
     
     output[[length(output) + 1]] <- res
