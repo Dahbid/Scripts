@@ -31,7 +31,7 @@ missings <- function(DT, ordered = FALSE) {
     if (any(duplicated(names(DT2)))) {
       setnames(DT2, make.names(names(DT2), unique = TRUE))
     }
-    DT2 <- melt(DT2, measure.vars = names(DT2), variable.name = "Variabele", value.name = "Missing")[order(as.character(Variabele))]
+    DT2 <- melt(DT2, measure.vars = names(DT2), variable.name = "Variabele", value.name = "Missing")
     DT2[, Proportioneel := round(Missing / rown, 3)][]
     if (ordered) {
       DT2 <- DT2[order(as.character(Variabele))]
