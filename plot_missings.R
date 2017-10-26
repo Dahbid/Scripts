@@ -5,6 +5,12 @@ plot_missings <- function(DT) {
     setDT(DT2)
   }
   
+  if (any(duplicated(colnames(DT2)))) {
+    setnames(DT2, make.names(names(DT2), unique = TRUE))
+    warning("Dataset contains duplicated column names.")
+  }
+  vars <- copy(names(DT2)) # if you don't use copy() id_xyz automagically get added to vars after that variable is created
+  
   # convert cells to either the class() or NA
   DT2[, (vars) := lapply(.SD, function(x) ifelse(!is.na(x), paste(class(x), collapse = '\n'), NA))]
   DT2[, id_xyz := .I]
