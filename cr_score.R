@@ -1,6 +1,6 @@
 cr_score <- function(DT, label, models, by, FUN) {
   library(Metrics)
-  library(Troep)
+  library(data.table)
   library(ggplot2)
   
   #input quoten
