@@ -41,7 +41,7 @@ multiplier <- function(train = NULL, test, from, to, by, label, prediction) {
     
     # multiplier toepassen
     DT[, test := j * get(prediction)]
-    
+
     # rmse berekenen
     res <- DT[, .(j = Metrics::rmse(get(label), test))]
     setnames(res, "j", paste0("X", j))
@@ -64,6 +64,10 @@ multiplier <- function(train = NULL, test, from, to, by, label, prediction) {
   winnaar <- beste[, best := colnames(beste)[apply(beste, 1, which.min)]][, best]
   
   # omzetten naar getal
-  winnaar <- as.numeric(sub('X', '', winnaar))
+  if (winnaar == "origineel") {
+    winnaar = 1
+  } else {
+    winnaar <- as.numeric(sub('X', '', winnaar))
+  }
   return(winnaar)
 }
