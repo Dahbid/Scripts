@@ -1,4 +1,8 @@
 descriptives <- function(DT) {
+  if (!is.data.table(DT)) {
+    DT <- as.data.table(DT)
+  }
+  
   namen <- names(DT)[sapply(DT, class) %in% c("character", "numeric", "integer", "factor")]
   wut <- DT[, .(Variable = namen, 
                   `Empty Cells` = sapply(.SD, function(x) sum(x == "", na.rm = TRUE))), .SDcols = namen]
