@@ -20,5 +20,5 @@ descriptives <- function(DT) {
   
   setcolorder(huh, c("Variable", "Rows", "Missing", "Perc. Missing", "Zeroes", "Perc. Zero", "Empty Cells", "Perc. Empty", 
                      "Infinite Values", "Perc. Infinite", "Distinct Values", "Type"))
-  return(huh)
+  return(as.data.table(huh))
 }
