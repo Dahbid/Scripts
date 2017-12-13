@@ -10,15 +10,14 @@ date_filter <- function(predictors, begin_date, end_date, date_variable, remove 
   date_vec <- lubridate::as_date(sapply(seq(as.Date(begin_date), as.Date(end_date), by="days"),
                      function (x) format(x, "%Y-%m-%d")))
   
-  # return all data that where the date isn't in date_vec
-  if (remove) {
+  if (remove) { # remove all data between begin_date and end_date
     if ( any(class(predictors[[date_variable]]) == "POSIXct") ) {
       return(predictors[!lubridate::as_date(get(date_variable)) %in% date_vec])
     } else {
       return(predictors[!get(date_variable) %in% date_vec])
     }
   } 
-  else {
+  else { # keep only the data between begin_date and end_date
     if ( any(class(predictors[[date_variable]]) == "POSIXct") ) {
       return(predictors[lubridate::as_date(get(date_variable)) %in% date_vec])
     } else {
