@@ -1,3 +1,16 @@
+#' Count missing values
+#'
+#' Counts missings values in data.frames, matrices and individual vectors and returns the count and proportion for each variable.
+#'
+#' @param DT A data.frame/table, matrix or vector.
+#' @param ordered Orders variables in output alphabetically. Defaults to FALSE.
+#'
+#' @return a data.table
+#'
+#' @examples missings(iris)
+#'
+#' @export
+
 missings <- function(DT, ordered = FALSE) {
   suppressPackageStartupMessages(library(data.table))
   # transform vectors into data.tables
