@@ -1,3 +1,13 @@
+#' Plot missing values
+#'
+#' Plot missing values using ggplot2::geom_raster()
+#'
+#' @param DT A data.frame/table
+#'
+#' @examples
+#' plot_missings(iris)
+#'
+#' @export
 plot_missings <- function(DT) {
   vars <- names(DT)
   DT2 <- copy(DT) 
