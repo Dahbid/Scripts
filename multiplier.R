@@ -27,7 +27,7 @@ multiplier <- function(train = NULL, test, from, to, by, label, prediction) {
     }
     
     result_train <- as.data.table(result_train)
-    result_train[, origineel := Metrics::rmse(train[, label, with = FALSE], train[, prediction, with = FALSE])]
+    result_train[, origineel := Metrics::rmse(train[[label]], train[[prediction]])]
   }
   
   
@@ -50,7 +50,7 @@ multiplier <- function(train = NULL, test, from, to, by, label, prediction) {
   
   result_test <- as.data.table(result_test)
   setnames(result_test, paste0('X', multiplier_sequence))
-  result_test[, origineel := Metrics::rmse(test[, label, with = FALSE], test[, prediction, with = FALSE])]
+  result_test[, origineel := Metrics::rmse(test[[label]], test[[prediction]])]
   
   if (!is.null(train)) {
     # train en test resultaten samenvoegen
@@ -60,8 +60,8 @@ multiplier <- function(train = NULL, test, from, to, by, label, prediction) {
   }
   
   # beste gemiddelde score voor elke waarde van multiplier_sequence
-  beste <- as.data.table(as.list(colMeans(result)))
-  winnaar <- beste[, best := colnames(beste)[apply(beste, 1, which.min)]][, best]
+  beste <- which.min(result)
+  winnaar <- names(beste)
   
   # omzetten naar getal
   if (winnaar == "origineel") {
