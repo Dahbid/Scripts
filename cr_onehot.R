@@ -1,4 +1,10 @@
 cr_onehot <- function(predictors, matrix = TRUE, complete = TRUE) {
+  # convert to data.table if necessary
+  if (!is.data.table(predictors)) {
+    predictors <- copy(predictors)
+    setDT(predictors)
+    }
+  
   # select names of factor variables
   factor_vars <- sapply(predictors, function(x) { length(levels(x))})
   factor_vars <- names(factor_vars[factor_vars > 0] )
